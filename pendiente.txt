@@ -1,0 +1,6 @@
+Agregar los archivos de configuración de Webpack.
+Agregar scripts.
+Terminar el maquetado.
+Plantear objetos (con sus atributos y métodos) y elementos a agregar. Posibilidad de plantear un diagrama de clases.
+Agregar la posibilidad de guardar localmente proyectos y tareas.
+Agregar la librería que se encarga de las fechas.
