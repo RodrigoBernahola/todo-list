@@ -1,0 +1,9 @@
+footer {
+    padding: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+
+footer p {
+    white-space: pre-line;
+}
