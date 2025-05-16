@@ -17,3 +17,19 @@ body > div{
 button:hover {
     cursor: pointer;
 }
+
+.project {
+
+    /* Agregar estilos para que todos los proyectos se vean iguales en cuanto a apariencia */
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.add-todo {
+
+    width: 100px;
+    height: 100px;
+
+}

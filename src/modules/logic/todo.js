@@ -5,18 +5,14 @@ class Todo {
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.notes = notes;
         this.checklist = checklist;
     }
 
-//     // Getter
-//   get area() {
-//     return this.calcArea();
-//   }
-//   // Method
-//   calcArea() {
-//     return this.height * this.width;
-//   }
+    toggleChecklistState () {
+
+       this.checklist = !this.checklist;
+
+    }
 
 
 }
