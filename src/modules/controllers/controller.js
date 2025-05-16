@@ -1,10 +1,22 @@
 import {Project} from '../logic/project.js';
+import {createIUProject} from '../views/components/createIUProject.js';
 
 class Controller {
 
     constructor(projects) {
 
         this.projects = projects;
+
+    }
+
+    initialize(gridContainer) {
+
+        //En este método se añadirá todo el funcionamiento necesario que se necesita la primera vez que carga la página
+
+        const firstProject = this.createProject('Default Project');
+        const iuNewProject = createIUProject(this.projects[0]);
+        gridContainer.appendChild(iuNewProject);
+
 
     }
 

@@ -7,8 +7,9 @@ export function createDialog() {
 
     //Creo el título del dialogo <h2>
     const h2 = document.createElement('h2');
-    h2.textContent = 'Agregar nuevo To-Do a este proyecto';
+    h2.textContent = 'Add a new To-Do to this project';
     dialog.appendChild(h2);
+    dialog.classList.add('dialogAddTodo');
 
     //Creo el formulario que estará dentro del dialog
     const form = document.createElement('form');
@@ -46,6 +47,23 @@ export function createDialog() {
     const dateLabel = document.createElement('label');
     dateLabel.textContent = 'Ingresa la fecha de vencimiento:';
     dateLabel.setAttribute('for', 'date');
+
+
+
+    const acceptButton = document.createElement('button');
+    acceptButton.textContent = 'Accept';
+    acceptButton.classList.add('acceptButton')
+    form.appendChild(acceptButton);
+
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+    cancelButton.classList.add('cancelButton');
+    form.appendChild(cancelButton);
+
+
+
+
+
 
 
     return dialog

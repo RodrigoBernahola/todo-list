@@ -5,6 +5,7 @@ import { createLandingPage } from './modules/views/components/landing.js';
 import { Controller } from './modules/controllers/controller.js';
 import { createIUProject } from './modules/views/components/createIUProject.js';
 import { createDialog } from './modules/views/components/dialog.js';
+import { IAddTodo } from './modules/views/boundary/IAddTodo.js';
 
 import './styles/styles.css';
 
@@ -43,9 +44,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const projectController =  new Controller([]);
 
-    projectController.createProject('Default Project example');
+    //El controlador crea el proyecto que se carga por defecto 
 
-    console.log(projectController);
+    projectController.initialize(gridContainer);
+
+
+    //Creo el objeto boundary encargado de la interacción con el usuario en el CU añadir todo
+
+    //Manejar los eventos (Interacción con la pantalla del CU Añadir To-Do)
+
+    const botonAgregarTodo = document.querySelector('.add-todo');
+    const botonAceptar = document.querySelector('.acceptButton');
+    const botonCancelar = document.querySelector('.cancelButton');
+    const iAddTodo = new IAddTodo();
+
+
+    botonAgregarTodo.addEventListener('click', (e) => {iAddTodo.clickAddTodo(e, dialog)});
+    botonCancelar.addEventListener('click', () => iAddTodo.cancelAdding(dialog));
+
+
+
+    //Comentarios para probar funcionamiento (<------------------------------------->)
+    //console.log(projectController);
 
     //En esta sección se hardcodea un nuevo Todo (estos datos deberán ser tomados desde la interfaz, luego validados y si son correctos crear y agregar un nuevo To-Do al proyecto que se haya seleccionado en la interfaz).
 
@@ -60,17 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Creo la interfaz de un nuevo proyecto, extrayendo los datos del primer elemento del array del controllador, que contiene a los proyectos, la función devuelve la iu necesaria y la agrego al contenedor de proyectos luego.
 
-    console.log(projectController.projects[0]);
-    console.log(gridContainer)
+    // console.log(projectController.projects[0]);
+    // console.log(gridContainer)
+    //Comentarios para probar funcionamiento (<------------------------------------->)
 
-    const iuNewProject = createIUProject(projectController.projects[0]);
-    gridContainer.appendChild(iuNewProject);
-    
 
-    //Manejar los eventos
-
-    const botonAgregarTodo = document.querySelector('.add-todo');
-
-    botonAgregarTodo.addEventListener('click', (e) => {projectController.addTodo(e)});
 
 });
