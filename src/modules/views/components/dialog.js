@@ -45,11 +45,84 @@ export function createDialog() {
 
     //Crear el campo fecha, luego modificarlo 
     const dateLabel = document.createElement('label');
-    dateLabel.textContent = 'Ingresa la fecha de vencimiento:';
+    dateLabel.textContent = 'Due date:';
     dateLabel.setAttribute('for', 'date');
+    form.appendChild(dateLabel);
+
+    const inputDate = document.createElement('input');
+    inputDate.setAttribute('type', 'date');
+    inputDate.setAttribute('id', 'date');
+    inputDate.setAttribute('name', 'date');
+    inputDate.required = true;
+    form.appendChild(inputDate); 
+
+    // Establecer la fecha mínima como hoy
+    // const today = new Date();
+    // const yyyy = today.getFullYear();
+    // const mm = String(today.getMonth() + 1).padStart(2, '0');
+    // const dd = String(today.getDate()).padStart(2, '0');
+    // const todayStr = `${yyyy}-${mm}-${dd}`;
+    // inputDate.setAttribute('min', todayStr);
+    // inputDate.value = todayStr;
+    
+    // form.appendChild(inputDate);
+
+
+    //Crear el elemento select con sus campos para prioridad
+
+    const labelPriority = document.createElement('label');
+    labelPriority.textContent = 'Select the priority:';
+    labelPriority.setAttribute('for', 'priority');
+    form.appendChild(labelPriority);
+
+    const selectPriority = document.createElement('select');
+    selectPriority.setAttribute('id', 'priority');
+    selectPriority.setAttribute('name', 'priority');
+    selectPriority.required = true;
+
+    const optionSelect = document.createElement('option');
+    optionSelect.textContent = 'Select an option';
+    optionSelect.value = '';
+    selectPriority.appendChild(optionSelect);
+
+    const optionHigh = document.createElement('option');
+    optionHigh.textContent = 'High priority';
+    optionHigh.setAttribute('value', 'high');
+    selectPriority.appendChild(optionHigh);
+
+    const optionMedium = document.createElement('option');
+    optionMedium.textContent = 'Medium priority';
+    optionMedium.setAttribute('value', 'medium');
+    selectPriority.appendChild(optionMedium);
+
+    const optionLow = document.createElement('option');
+    optionLow.textContent = 'Low priority';
+    optionLow.setAttribute('value', 'low');
+    selectPriority.appendChild(optionLow);
+
+    form.appendChild(selectPriority);
+
+    //Crear el campo para el checklist
+
+    const checklistContainer = document.createElement('div');
+    checklistContainer.classList.add('checkbox-container');
+    
+    const checklistCheckbox = document.createElement('input');
+    checklistCheckbox.setAttribute('type', 'checkbox');
+    checklistCheckbox.setAttribute('id', 'checklist');
+    checklistCheckbox.setAttribute('name', 'checklist');
+    
+    const checklistLabel = document.createElement('label');
+    checklistLabel.setAttribute('for', 'checklist');
+    checklistLabel.textContent = 'Mark as completed';
+    
+    checklistContainer.appendChild(checklistCheckbox);
+    checklistContainer.appendChild(checklistLabel);
+    form.appendChild(checklistContainer);
 
 
 
+    //Creacion de botones dentro del dialog
     const acceptButton = document.createElement('button');
     acceptButton.textContent = 'Accept';
     acceptButton.classList.add('acceptButton')
@@ -59,11 +132,6 @@ export function createDialog() {
     cancelButton.textContent = 'Cancel';
     cancelButton.classList.add('cancelButton');
     form.appendChild(cancelButton);
-
-
-
-
-
 
 
     return dialog
