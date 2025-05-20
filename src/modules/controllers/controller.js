@@ -13,7 +13,7 @@ class Controller {
 
         //En este método se añadirá todo el funcionamiento necesario que se necesita la primera vez que carga la página
 
-        const firstProject = this.createProject('Default Project');
+        this.createProject('Default Project');
         const iuNewProject = createIUProject(this.projects[0]);
         gridContainer.appendChild(iuNewProject);
 
@@ -35,10 +35,17 @@ class Controller {
 
     }
 
-    addTodo(e) {
+    addTodo(todoData, projectName) {
 
-        //Esto obtiene el HTML del proyecto que ha sido clickeado
-        console.log(e.target.parentElement);
+        console.log(todoData);
+        console.log(this.projects);
+        console.log(projectName);
+
+        //Con los datos del To-do crearlo y agregarlo al proyecto que corresponde, de crearlo se encarga el proyecto dueño.
+
+        //Filtrar entre los proyectos existentes aquel que tiene el mismo nombre que el parametro y mandarle el mensaje con los datos del proyecto.
+
+        this.projects.find( (project), project.name === projectName);
 
     }
 

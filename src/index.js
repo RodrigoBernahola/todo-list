@@ -57,10 +57,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonAceptar = document.querySelector('.acceptButton');
     const botonCancelar = document.querySelector('.cancelButton');
     const iAddTodo = new IAddTodo();
+    let actualProject = projectController.projects[0];
 
 
-    botonAgregarTodo.addEventListener('click', (e) => {iAddTodo.clickAddTodo(e, dialog)});
+    botonAgregarTodo.addEventListener('click', (event) => {
+        
+        iAddTodo.clickAddTodo(event, dialog);
+        actualProject = event.target.parentElement.querySelector('h3').textContent;
+
+    });
+
     botonCancelar.addEventListener('click', () => iAddTodo.cancelAdding(dialog));
+
+
+    //Cuando se presiona el boton aceptar del todo, pasarlos al gestor y que los valide. Si son validos los datos ingresados, agregar el
+    
+    botonAceptar.addEventListener('click', (e) => {
+
+        let res = iAddTodo.extractData(e, dialog);
+
+        if (res) {
+
+            let projectName = actualProject
+            projectController.addTodo(res, projectName);
+
+        }
+
+        else {
+
+            alert('Please fill in all required fields');
+
+        }
+    });
+
+
+
 
 
 
