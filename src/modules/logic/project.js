@@ -12,10 +12,12 @@ class Project {
 
 
 
-    addTodo(event) {
+    addTodo(todoData) {
 
+        const newTodo = new Todo(todoData.title, todoData.description, todoData.dueDate, todoData.priority, todoData.isCompleted);
 
-        //this.todosList.push(todo);
+        this.todosList.push(newTodo);
+
 
     }
 

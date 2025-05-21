@@ -37,15 +37,13 @@ class Controller {
 
     addTodo(todoData, projectName) {
 
-        console.log(todoData);
-        console.log(this.projects);
-        console.log(projectName);
-
         //Con los datos del To-do crearlo y agregarlo al proyecto que corresponde, de crearlo se encarga el proyecto dueño.
 
         //Filtrar entre los proyectos existentes aquel que tiene el mismo nombre que el parametro y mandarle el mensaje con los datos del proyecto.
 
-        this.projects.find( (project), project.name === projectName);
+        let selectedProject = this.projects.find( (project) => project.name === projectName);
+
+        selectedProject.addTodo(todoData);
 
     }
 

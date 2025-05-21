@@ -58,12 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonCancelar = document.querySelector('.cancelButton');
     const iAddTodo = new IAddTodo();
     let actualProject = projectController.projects[0];
+    let actualProjectTodoContainer = gridContainer.querySelector('.todosContainer');
 
 
     botonAgregarTodo.addEventListener('click', (event) => {
         
         iAddTodo.clickAddTodo(event, dialog);
         actualProject = event.target.parentElement.querySelector('h3').textContent;
+        actualProjectTodoContainer = event.target.parentElement.querySelector('.todosContainer');
 
     });
 
@@ -80,6 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let projectName = actualProject
             projectController.addTodo(res, projectName);
+            iAddTodo.refreshIU(res, actualProjectTodoContainer);
+
+            //Reiniciar los valores por defecto en el dialog
+            let form = dialog.querySelector('form');
+            form.reset();
+
+            iAddTodo.cancelAdding(dialog);
+
 
         }
 
