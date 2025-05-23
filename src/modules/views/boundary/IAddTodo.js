@@ -1,35 +1,89 @@
+import { createDialog } from '../components/dialog.js';
+
 class IAddTodo {
-
-
-    clickAddTodo(event, dialog) {
-
-        console.log(event);
-
-        dialog.showModal()
-
-        return;
-
-    }
-    
-
-    cancelAdding(dialog) {
-
-        dialog.close()
-
-        return;
+    constructor(projectController) {
+        this.projectController = projectController;
+        this.dialog = null;
+        this.currentProject = null;
+        this.currentProjectContainer = null;
         
+        // Bind methods to preserve 'this' context
+        this.handleAddTodoClick = this.handleAddTodoClick.bind(this);
+        this.handleAcceptClick = this.handleAcceptClick.bind(this);
+        this.handleCancelClick = this.handleCancelClick.bind(this);
     }
 
+    // Método para inicializar los event listeners
+    initialize() {
+        this.attachEventListeners();
+    }
 
-    extractData(event, dialog) {
+    // Método central para manejar todos los eventos relacionados
+    attachEventListeners() {
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('add-todo')) {
+                this.handleAddTodoClick(event);
+            }
+        });
+    }
 
+    handleAddTodoClick(event) {
+        // Crear y mostrar el dialog
+        this.dialog = createDialog();
+        document.body.appendChild(this.dialog);
+        
+        // Guardar referencias del proyecto actual
+        this.currentProject = event.target.parentElement.querySelector('h3').textContent;
+        this.currentProjectContainer = event.target.parentElement.querySelector('.todosContainer');
+        
+        // Configurar event listeners específicos del dialog
+        this.setupDialogEventListeners();
+        
+        // Mostrar el modal
+        this.dialog.showModal();
+    }
+
+    setupDialogEventListeners() {
+        const acceptButton = this.dialog.querySelector('.acceptButton');
+        const cancelButton = this.dialog.querySelector('.cancelButton');
+        
+        acceptButton.addEventListener('click', this.handleAcceptClick);
+        cancelButton.addEventListener('click', this.handleCancelClick);
+        
+        // Event listener para cerrar con ESC
+        this.dialog.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.handleCancelClick();
+            }
+        });
+    }
+
+    handleAcceptClick(event) {
+        const todoData = this.extractData(event);
+        
+        if (todoData) {
+            // Usar el controlador para agregar el todo
+            this.projectController.addTodo(todoData, this.currentProject);
+            
+            // Actualizar la interfaz
+            this.refreshUI(todoData, this.currentProjectContainer);
+            
+            // Limpiar y cerrar
+            this.resetAndClose();
+        } else {
+            this.showError('Please fill in all required fields');
+        }
+    }
+
+    handleCancelClick() {
+        this.resetAndClose();
+    }
+
+    extractData(event) {
         event.preventDefault();
 
-
-        const form = dialog.querySelector('form');
+        const form = this.dialog.querySelector('form');
         const formData = new FormData(form);
-
-        //Extraer valores
 
         const title = formData.get('title');
         const description = formData.get('description') || '';
@@ -37,58 +91,68 @@ class IAddTodo {
         const priority = formData.get('priority');
         const isCompleted = formData.get('checklist') === 'on';
 
+        // Validación
         if (!title || !dueDate || !priority) {
-
-            return;
-
+            return null;
         }
-    
-        let res = {title, description, dueDate, priority, isCompleted};
 
-        console.log(res);
-        console.table(res);
-
-        return res;
-
+        return { title, description, dueDate, priority, isCompleted };
     }
 
+    refreshUI(todoData, todosContainer) {
+        const todoElement = this.createTodoElement(todoData);
+        todosContainer.appendChild(todoElement);
+    }
 
-    refreshIU(todoData, todosContainer) {
-
-
-        console.log(todoData);
-        console.log(todosContainer);
-
+    createTodoElement(todoData) {
         const todoDiv = document.createElement('div');
+        todoDiv.className = 'todo-item';
 
-        const todoTitle = document.createElement('p');
-        todoTitle.textContent = todoData.title;
-        todoDiv.appendChild(todoTitle);
+        const elements = [
+            { tag: 'h4', content: todoData.title, className: 'todo-title' },
+            { tag: 'p', content: todoData.description, className: 'todo-description' },
+            { tag: 'p', content: `Due: ${todoData.dueDate}`, className: 'todo-date' },
+            { tag: 'p', content: `Priority: ${todoData.priority}`, className: 'todo-priority' },
+            { tag: 'p', content: `Completed: ${todoData.isCompleted}`, className: 'todo-status' }
+        ];
 
-        const todoDescription = document.createElement('p');
-        todoDescription.textContent = todoData.description;
-        todoDiv.appendChild(todoDescription);
+        elements.forEach(({ tag, content, className }) => {
+            const element = document.createElement(tag);
+            element.textContent = content;
+            element.className = className;
+            todoDiv.appendChild(element);
+        });
 
-        const todoDueDate = document.createElement('p');
-        todoDueDate.textContent = todoData.dueDate;
-        todoDiv.appendChild(todoDueDate);
-
-        const todoPriority = document.createElement('p');
-        todoPriority.textContent = todoData.priority;
-        todoDiv.appendChild(todoPriority);
-
-        const todoChecklist =  document.createElement('p');
-        todoChecklist.textContent = todoData.isCompleted;
-        todoDiv.appendChild(todoChecklist);
-
-        todosContainer.appendChild(todoDiv);
-
-        return;
-
+        return todoDiv;
     }
 
+    resetAndClose() {
+        if (this.dialog) {
+            const form = this.dialog.querySelector('form');
+            if (form) form.reset();
+            
+            this.dialog.close();
+            this.dialog.remove();
+            this.dialog = null;
+        }
+        
+        // Limpiar referencias
+        this.currentProject = null;
+        this.currentProjectContainer = null;
+    }
 
+    showError(message) {
+        // Podrías implementar un sistema de notificaciones más sofisticado
+        alert(message);
+    }
+
+    // Método para limpiar event listeners si es necesario
+    destroy() {
+        if (this.dialog) {
+            this.dialog.remove();
+        }
+        // Aquí podrías remover event listeners globales si los hubiera
+    }
 }
-
 
 export { IAddTodo };

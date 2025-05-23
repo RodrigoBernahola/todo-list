@@ -12,6 +12,7 @@ export function createHero() {
 
     const button = document.createElement('button');
     button.textContent = 'Create a new project';
+    button.classList.add('buttonAddNewProject');
 
 
     hero.appendChild(h1);
