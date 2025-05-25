@@ -11,8 +11,7 @@ export function createIUProject(project) {
 
     const button = document.createElement('button');
     button.textContent = 'Add To-do';
-    button.classList.add('add-todo')
-
+    button.classList.add('add-todo');
     
     projectDiv.appendChild(projectName);
     projectDiv.appendChild(button);

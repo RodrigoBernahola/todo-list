@@ -1,4 +1,5 @@
 import { createProjectDialog } from '../components/createProjectDialog.js';
+import {createIUProject } from '../components/createIUProject.js';
 
 class IAddProject {
 
@@ -65,6 +66,20 @@ class IAddProject {
     }
 
     handleAcceptClick() {
+
+
+        const projectName = this.dialog.querySelector('input').value;
+
+        if (projectName) {
+
+            //Se agrega el proyecto al array de proyectos
+            const newProject = this.projectController.createProject(projectName);
+            const newProjectIU = createIUProject(newProject);
+            document.querySelector('.gridContainer').appendChild(newProjectIU);
+
+            console.log(this.projectController.projects);
+
+        }
 
 
     }

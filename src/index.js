@@ -69,4 +69,3 @@ function handleGlobalErrors() {
     });
 }
 
-// Opcional: llamar a handleGlobalErrors() si quieres manejo global de errores

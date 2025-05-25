@@ -113,7 +113,10 @@ class IAddTodo {
             { tag: 'p', content: todoData.description, className: 'todo-description' },
             { tag: 'p', content: `Due: ${todoData.dueDate}`, className: 'todo-date' },
             { tag: 'p', content: `Priority: ${todoData.priority}`, className: 'todo-priority' },
-            { tag: 'p', content: `Completed: ${todoData.isCompleted}`, className: 'todo-status' }
+            { tag: 'p', content: `Completed: ${todoData.isCompleted}`, className: 'todo-status' },
+            { tag: 'button', content: 'Delete To-do', className: 'delete-todo' },
+            { tag: 'button', content: 'Completed', className: 'complete-todo' },
+            { tag: 'button', content: 'Edit To-do', className: 'edit-todo' }
         ];
 
         elements.forEach(({ tag, content, className }) => {

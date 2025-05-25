@@ -27,6 +27,9 @@ class Controller {
         const project = new Project(projectName, []);
         this.projects.push(project);
 
+        return project;
+
+
     }
 
     removeProject(projectName) {
