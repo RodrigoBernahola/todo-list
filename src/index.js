@@ -68,4 +68,3 @@ function handleGlobalErrors() {
         // Aquí podrías implementar logging o notificaciones de error
     });
 }
-

@@ -25,7 +25,39 @@ class IAddTodo {
                 this.handleAddTodoClick(event);
             }
         });
+
+        document.addEventListener('click', (event) => {
+
+            if (event.target.classList.contains('delete-todo')) {
+
+                this.handleDeleteTodoClick(event);
+
+            }
+
+        });
     }
+
+    handleDeleteTodoClick(event) {
+
+        //En este metodo se debe obtener a que proyecto pertenece el todo seleccionado (su nombre) y el titulo del todo clickeado
+        // console.log(event.target);
+
+        // console.log(event.target.parentElement);
+
+        // console.log(event.target.parentElement.querySelector('.todo-title').textContent);
+
+        // console.log(event.target.parentElement.parentElement.parentElement.querySelector('h3').textContent);
+
+        const todoTitle = event.target.parentElement.querySelector('.todo-title').textContent;
+
+        const projectName = event.target.parentElement.parentElement.parentElement.querySelector('h3').textContent;
+
+        console.log('Nombre del proyecto clickeado:', projectName);
+        console.log('Titulo del todo clickeado:', todoTitle);
+
+    }
+
+
 
     handleAddTodoClick(event) {
         // Crear y mostrar el dialog
