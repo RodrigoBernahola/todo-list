@@ -35,25 +35,45 @@ class IAddTodo {
             }
 
         });
+
+        document.addEventListener('click', (event) => {
+
+            if (event.targe.classList.contains('complete-todo')) {
+
+                this.handleCompleteTodoClick(event);
+
+            }
+
+        })
     }
+
+
+    handleCompleteTodoClick(event) {
+
+        
+
+
+    }
+
+
 
     handleDeleteTodoClick(event) {
 
         //En este metodo se debe obtener a que proyecto pertenece el todo seleccionado (su nombre) y el titulo del todo clickeado
-        // console.log(event.target);
+        // console.log(event.target). Ademas de ello se debe eliminar la parte que corresponde a la interfaz.;
 
-        // console.log(event.target.parentElement);
 
-        // console.log(event.target.parentElement.querySelector('.todo-title').textContent);
-
-        // console.log(event.target.parentElement.parentElement.parentElement.querySelector('h3').textContent);
+        //Se buscan y eliminan los objetos correspondientes a la interfaz clickeados.
 
         const todoTitle = event.target.parentElement.querySelector('.todo-title').textContent;
-
         const projectName = event.target.parentElement.parentElement.parentElement.querySelector('h3').textContent;
+        this.projectController.deleteTodo(todoTitle, projectName);
 
-        console.log('Nombre del proyecto clickeado:', projectName);
-        console.log('Titulo del todo clickeado:', todoTitle);
+
+        //Una vez eliminados los objetos, se elimina su interfaz correspondiente
+        const todoItem = event.target.parentElement;
+	    const todosContainer = todoItem.parentElement;
+	    todosContainer.removeChild(todoItem);
 
     }
 

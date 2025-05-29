@@ -27,9 +27,7 @@ class IAddProject {
         document.addEventListener('click', (event) => {
 
             if (event.target.classList.contains('buttonAddNewProject')) {
-                console.log('pepe');
                 this.handleAddProjectClick(event);
-
             }
 
         })
@@ -40,7 +38,6 @@ class IAddProject {
 
         this.dialog = createProjectDialog();
         document.body.appendChild(this.dialog);
-
 
         this.setupDialogEventListeners();
 
@@ -67,7 +64,6 @@ class IAddProject {
 
     handleAcceptClick() {
 
-
         const projectName = this.dialog.querySelector('input').value;
 
         if (projectName) {
@@ -81,6 +77,7 @@ class IAddProject {
 
         }
 
+        this.resetAndClose();
 
     }
 

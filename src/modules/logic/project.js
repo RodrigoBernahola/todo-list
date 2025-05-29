@@ -25,6 +25,9 @@ class Project {
 
         //Buscar en el array de todosList:Array iterando sobre cada uno de los ToDos del proyecto filtrado por nombre previamente por el gestor (metodo iterativo sobre los proyectos). Luego que se envía el mensaje al objeto proyecto que coincide con el nombre del proyecto que fue clickeado.
 
+        let selectedTodoIndex = this.todosList.findIndex( (todo) => todo.title === todoTitle );
+        
+        this.todosList.splice(selectedTodoIndex, 1);
 
     }
 

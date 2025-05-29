@@ -50,6 +50,15 @@ class Controller {
 
     }
 
+    deleteTodo(todoTitle, projectName) {
+
+        let selectedProject = this.projects.find( (project) => project.name === projectName);
+
+        selectedProject.deleteTodo(todoTitle);
+
+
+    }
+
 
 
 }
