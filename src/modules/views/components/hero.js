@@ -1,5 +1,5 @@
 //Esta función se encarga de crear y exportar el hero de la landing page.
-import '../../../styles/hero.css';
+import '../../../styles/components/hero.css';
 
 
 export function createHero() {

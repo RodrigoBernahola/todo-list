@@ -1,3 +1,13 @@
+/* Base styles */
+
+@import './base/variables.css';
+
+/* Components */
+
+@import './components/footer.css';
+@import './components/hero.css';
+
+
 * {
     margin: 0;
     padding: 0;

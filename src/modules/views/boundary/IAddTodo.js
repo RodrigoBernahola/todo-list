@@ -38,7 +38,7 @@ class IAddTodo {
 
         document.addEventListener('click', (event) => {
 
-            if (event.targe.classList.contains('complete-todo')) {
+            if (event.target.classList.contains('complete-todo')) {
 
                 this.handleCompleteTodoClick(event);
 
@@ -50,7 +50,7 @@ class IAddTodo {
 
     handleCompleteTodoClick(event) {
 
-        
+
 
 
     }

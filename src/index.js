@@ -5,7 +5,7 @@ import { Controller } from './modules/controllers/controller.js';
 import { IAddTodo } from './modules/views/boundary/IAddTodo.js';
 import { IAddProject } from './modules/views/boundary/IAddProject.js';
 
-import './styles/styles.css';
+import './styles/main.css';
 
 if (process.env.NODE_ENV !== 'production') {
     console.log('Looks like we are in development mode!');
