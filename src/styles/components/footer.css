@@ -1,9 +1,47 @@
 footer {
-    padding: 50px;
-    font-weight: bold;
+    padding: 40px 50px;
+    font-weight: 600;
     text-align: center;
+    background: linear-gradient(135deg, rgba(177, 187, 247, 0.1) 0%, rgba(138, 154, 241, 0.1) 100%);
+    border-radius: 20px 20px 0 0;
+    margin: 0 20px;
+    position: relative;
+    color: #666;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+    border-radius: 2px;
 }
 
 footer p {
     white-space: pre-line;
+    line-height: 1.8;
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+footer p:hover {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Responsive para footer */
+@media (max-width: 768px) {
+    footer {
+        padding: 30px 20px;
+        margin: 0 10px;
+    }
+    
+    footer p {
+        font-size: 14px;
+    }
 }
