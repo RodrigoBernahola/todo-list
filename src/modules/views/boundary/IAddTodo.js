@@ -1,4 +1,6 @@
 import { createDialog } from '../components/dialog.js';
+import { isValid, parse } from "date-fns";
+
 
 class IAddTodo {
     constructor(projectController) {
@@ -78,7 +80,6 @@ class IAddTodo {
     }
 
 
-
     handleAddTodoClick(event) {
         // Crear y mostrar el dialog
         this.dialog = createDialog();
@@ -115,10 +116,12 @@ class IAddTodo {
         
         if (todoData) {
             // Usar el controlador para agregar el todo
-            this.projectController.addTodo(todoData, this.currentProject);
+            let newTodo = this.projectController.addTodo(todoData, this.currentProject);
+
+            let todoId = newTodo.id;
             
             // Actualizar la interfaz
-            this.refreshUI(todoData, this.currentProjectContainer);
+            this.refreshUI(todoData, todoId, this.currentProjectContainer);
             
             // Limpiar y cerrar
             this.resetAndClose();
@@ -131,55 +134,181 @@ class IAddTodo {
         this.resetAndClose();
     }
 
+
     extractData(event) {
+
         event.preventDefault();
 
         const form = this.dialog.querySelector('form');
         const formData = new FormData(form);
 
-        const title = formData.get('title');
-        const description = formData.get('description') || '';
-        const dueDate = formData.get('date');
-        const priority = formData.get('priority');
-        const isCompleted = formData.get('checklist') === 'on';
+        const title = formData.get('title'); //string
+        const description = formData.get('description') || ''; //string
 
-        // Validación
-        if (!title || !dueDate || !priority) {
+        let dueDateString = formData.get('date'); //string
+        
+        const priority = formData.get('priority'); //Duvuelve un string con el texto seleccionado
+        const isCompleted = formData.get('checklist'); //Devuelve object o null
+
+        console.log('TITULO');
+        console.log(formData.get('title'));
+        console.log(typeof(formData.get('title')));
+
+        console.log('FECHA');
+        console.log(formData.get('date'));
+        console.log(typeof(formData.get('date')));
+
+        console.log('PRIORIDAD');
+        console.log(formData.get('priority'));
+        console.log(typeof(formData.get('priority')));
+
+        console.log('CHECKLIST');
+        console.log(formData.get('checklist'));
+        console.log(typeof(formData.get('chceklist')));        
+        console.log(true === formData.get('checklist'));
+        console.log(formData.get('checklist') === 'on'); //TRUE SI SE MARCA EL CHECKLIST
+
+        //Los datos que son necesarios validar (obligatorios) son: Titulo, prioridad, fecha. 
+        // La descripcion y el checklist pueden estar vacios o por defecto
+
+        // Validaciones
+
+        if (!title || !priority) {
+            return null;
+        };
+
+        // Validar fecha y obtener el objeto Date
+        const dueDate = this.validateDate(dueDateString);
+        if (!dueDate) {
             return null;
         }
+
+
+        // console.log(dueDate);
+        // console.log(formData.get('date'));
 
         return { title, description, dueDate, priority, isCompleted };
     }
 
-    refreshUI(todoData, todosContainer) {
-        const todoElement = this.createTodoElement(todoData);
+
+    validateDate(dateString) {
+
+        if (!dateString || dateString.trim() === '') {
+            console.log('Fecha requerida');
+            return null;
+        }
+        // Para input HTML date, el formato yyyy-MM-dd es válido para Date()
+
+        const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
+
+        if (!isValid(parsedDate)) {
+            console.log('Error: La fecha ingresada no es válida o no está en el formato YYYY-MM-DD.');
+            return null; // Si no es válida, devolvemos null
+        }
+
+        return parsedDate; // Devuelve el objeto Date válido
+
+    }
+
+    refreshUI(todoData, todoId, todosContainer) {
+        const todoElement = this.createTodoElement(todoData, todoId);
         todosContainer.appendChild(todoElement);
     }
 
-    createTodoElement(todoData) {
+
+    createTodoElement(todoData, todoId) {
+        // Crear el contenedor principal
         const todoDiv = document.createElement('div');
-        todoDiv.className = 'todo-item';
+        todoDiv.className = 'todo-item new';
+        todoDiv.setAttribute('todo-id', todoId);
+        
+        // Si está completado, añadir la clase correspondiente
+        if (todoData.isCompleted === 'on') {
+            todoDiv.classList.add('completed');
+        }
+        
+        // Crear los elementos de información
+        const title = document.createElement('h4');
+        title.textContent = todoData.title;
+        title.className = 'todo-title';
+        
+        const description = document.createElement('p');
+        description.textContent = todoData.description;
+        description.className = 'todo-description';
+        
+        const dueDate = document.createElement('p');
+        dueDate.textContent = `Due: ${this.formatDate(todoData.dueDate)}`;
+        dueDate.className = 'todo-date';
+        
+        const priority = document.createElement('p');
+        priority.textContent = `Priority: ${todoData.priority}`;
+        priority.className = 'todo-priority';
+        priority.dataset.priority = todoData.priority.toLowerCase();
+        
+        const status = document.createElement('p');
+        status.textContent = `Completed: ${todoData.isCompleted}`;
+        status.className = 'todo-status';
+        status.dataset.completed = todoData.isCompleted;
 
-        const elements = [
-            { tag: 'h4', content: todoData.title, className: 'todo-title' },
-            { tag: 'p', content: todoData.description, className: 'todo-description' },
-            { tag: 'p', content: `Due: ${todoData.dueDate}`, className: 'todo-date' },
-            { tag: 'p', content: `Priority: ${todoData.priority}`, className: 'todo-priority' },
-            { tag: 'p', content: `Completed: ${todoData.isCompleted}`, className: 'todo-status' },
-            { tag: 'button', content: 'Delete To-do', className: 'delete-todo' },
-            { tag: 'button', content: 'Completed', className: 'complete-todo' },
-            { tag: 'button', content: 'Edit To-do', className: 'edit-todo' }
-        ];
+        
+        
+        // Crear contenedor para los botones
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'todo-actions';
+        
+        // Crear botones
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete To-do';
+        deleteBtn.className = 'delete-todo';
+        
+        const completeBtn = document.createElement('button');
+        completeBtn.textContent = 'Completed';
+        completeBtn.className = 'complete-todo';
+        
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit To-do';
+        editBtn.className = 'edit-todo';
+        
+        // Añadir botones al contenedor de acciones
+        actionsDiv.appendChild(deleteBtn);
+        actionsDiv.appendChild(completeBtn);
+        actionsDiv.appendChild(editBtn);
+        
+        // Añadir todos los elementos al contenedor principal
+        todoDiv.appendChild(title);
+        todoDiv.appendChild(description);
+        todoDiv.appendChild(dueDate);
+        todoDiv.appendChild(priority);
+        todoDiv.appendChild(status);
+        todoDiv.appendChild(actionsDiv);
+        
+        // Eliminar la clase 'new' después de la animación
+        setTimeout(() => {
+            todoDiv.classList.remove('new');
+        }, 500);
+    
+    return todoDiv;
+    }   
 
-        elements.forEach(({ tag, content, className }) => {
-            const element = document.createElement(tag);
-            element.textContent = content;
-            element.className = className;
-            todoDiv.appendChild(element);
-        });
 
-        return todoDiv;
+    // Método auxiliar para formatear fechas
+    formatDate(dateString) {
+        if (!dateString) return 'No date';
+        
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return dateString;
+            
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        } catch (e) {
+            return dateString;
+        }
     }
+
 
     resetAndClose() {
         if (this.dialog) {
@@ -196,10 +325,12 @@ class IAddTodo {
         this.currentProjectContainer = null;
     }
 
+
     showError(message) {
         // Podrías implementar un sistema de notificaciones más sofisticado
         alert(message);
     }
+
 
     // Método para limpiar event listeners si es necesario
     destroy() {
@@ -208,6 +339,7 @@ class IAddTodo {
         }
         // Aquí podrías remover event listeners globales si los hubiera
     }
+
 }
 
 export { IAddTodo };

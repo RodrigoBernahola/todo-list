@@ -14,11 +14,17 @@ class Project {
 
     addTodo(todoData) {
 
+        let uuid = self.crypto.randomUUID();
+
         const newTodo = new Todo(todoData.title, todoData.description, todoData.dueDate, todoData.priority, todoData.isCompleted);
+
+        newTodo.id = uuid;
 
         this.todosList.push(newTodo);
 
+        console.log(newTodo);
 
+        return newTodo;
     }
 
     deleteTodo(todoTitle) {

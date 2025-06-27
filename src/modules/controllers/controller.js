@@ -46,7 +46,9 @@ class Controller {
 
         let selectedProject = this.projects.find( (project) => project.name === projectName);
 
-        selectedProject.addTodo(todoData);
+        let newTodo = selectedProject.addTodo(todoData);
+
+        return newTodo;
 
     }
 

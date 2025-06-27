@@ -6,7 +6,7 @@
 
 @import './components/footer.css';
 @import './components/hero.css';
-
+@import './components/todo-styles.css';
 
 * {
     margin: 0;

@@ -56,17 +56,6 @@ export function createDialog() {
     inputDate.required = true;
     form.appendChild(inputDate); 
 
-    // Establecer la fecha mínima como hoy
-    // const today = new Date();
-    // const yyyy = today.getFullYear();
-    // const mm = String(today.getMonth() + 1).padStart(2, '0');
-    // const dd = String(today.getDate()).padStart(2, '0');
-    // const todayStr = `${yyyy}-${mm}-${dd}`;
-    // inputDate.setAttribute('min', todayStr);
-    // inputDate.value = todayStr;
-    
-    // form.appendChild(inputDate);
-
 
     //Crear el elemento select con sus campos para prioridad
 
@@ -103,9 +92,6 @@ export function createDialog() {
     form.appendChild(selectPriority);
 
     //Crear el campo para el checklist
-
-    const checklistContainer = document.createElement('div');
-    checklistContainer.classList.add('checkbox-container');
     
     const checklistCheckbox = document.createElement('input');
     checklistCheckbox.setAttribute('type', 'checkbox');
@@ -116,10 +102,8 @@ export function createDialog() {
     checklistLabel.setAttribute('for', 'checklist');
     checklistLabel.textContent = 'Mark as completed';
     
-    checklistContainer.appendChild(checklistCheckbox);
-    checklistContainer.appendChild(checklistLabel);
-    form.appendChild(checklistContainer);
-
+    form.appendChild(checklistCheckbox);
+    form.appendChild(checklistLabel);
 
 
     //Creacion de botones dentro del dialog
