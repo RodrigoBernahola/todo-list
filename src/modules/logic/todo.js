@@ -10,10 +10,18 @@ class Todo {
 
     toggleChecklistState () {
 
-       this.checklist = !this.checklist;
+        if (!this.checklist) {
 
+            this.checklist = true;
+
+        }   
+
+        else {
+            this.checklist = false;
+        }
+
+        return this.checklist;
     }
-
 
 }
 

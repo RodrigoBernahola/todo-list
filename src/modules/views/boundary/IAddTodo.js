@@ -52,29 +52,42 @@ class IAddTodo {
 
     handleCompleteTodoClick(event) {
 
+        let string;
 
+        //Se buscan y eliminan los objetos correspondientes a la interfaz clickeados. A través de sus ids.
+
+        const todoItem = event.target.parentElement.parentElement;
+	    const todosContainer = todoItem.parentElement;
+
+        const todoId = todoItem.getAttribute('todo-id');
+        const projectId = todosContainer.parentElement.getAttribute('project-id');
+
+        let checklistRes = this.projectController.completeTodo(todoId, projectId);
+
+        //AGREGAR LA ACTUALIZACION DE INTERFAZ DE ESTE TODO
+
+        checklistRes ? string = 'Completed: Yes' : string = 'Completed: No';
+
+        todoItem.querySelector('p.todo-status').textContent = string;
 
 
     }
 
 
-
     handleDeleteTodoClick(event) {
 
-        //En este metodo se debe obtener a que proyecto pertenece el todo seleccionado (su nombre) y el titulo del todo clickeado
-        // console.log(event.target). Ademas de ello se debe eliminar la parte que corresponde a la interfaz.;
+        //Se buscan y eliminan los objetos correspondientes a la interfaz clickeados. A través de sus ids.
 
+        const todoItem = event.target.parentElement.parentElement;
+	    const todosContainer = todoItem.parentElement;
 
-        //Se buscan y eliminan los objetos correspondientes a la interfaz clickeados.
+        const todoId = todoItem.getAttribute('todo-id');
+        const projectId = todosContainer.parentElement.getAttribute('project-id');
 
-        const todoTitle = event.target.parentElement.querySelector('.todo-title').textContent;
-        const projectName = event.target.parentElement.parentElement.parentElement.querySelector('h3').textContent;
-        this.projectController.deleteTodo(todoTitle, projectName);
-
+        this.projectController.deleteTodo(todoId, projectId);
 
         //Una vez eliminados los objetos, se elimina su interfaz correspondiente
-        const todoItem = event.target.parentElement;
-	    const todosContainer = todoItem.parentElement;
+    
 	    todosContainer.removeChild(todoItem);
 
     }
@@ -84,9 +97,9 @@ class IAddTodo {
         // Crear y mostrar el dialog
         this.dialog = createDialog();
         document.body.appendChild(this.dialog);
-        
+
         // Guardar referencias del proyecto actual
-        this.currentProject = event.target.parentElement.querySelector('h3').textContent;
+        this.currentProject = event.target.parentElement.getAttribute('project-id');
         this.currentProjectContainer = event.target.parentElement.querySelector('.todosContainer');
         
         // Configurar event listeners específicos del dialog
@@ -183,10 +196,6 @@ class IAddTodo {
             return null;
         }
 
-
-        // console.log(dueDate);
-        // console.log(formData.get('date'));
-
         return { title, description, dueDate, priority, isCompleted };
     }
 
@@ -246,7 +255,9 @@ class IAddTodo {
         priority.dataset.priority = todoData.priority.toLowerCase();
         
         const status = document.createElement('p');
-        status.textContent = `Completed: ${todoData.isCompleted}`;
+
+        let statusText = todoData.isCompleted !== null ? 'Yes' : 'No'; 
+        status.textContent = `Completed: ${statusText}`;
         status.className = 'todo-status';
         status.dataset.completed = todoData.isCompleted;
 

@@ -77,6 +77,10 @@ class IAddProject {
 
         }
 
+        else {
+            alert('No se ingreso nombre de proyecto correctamente');
+        }
+
         this.resetAndClose();
 
     }

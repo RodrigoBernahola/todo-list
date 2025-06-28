@@ -27,17 +27,26 @@ class Project {
         return newTodo;
     }
 
-    deleteTodo(todoTitle) {
+    deleteTodo(todoId) {
 
-        //Buscar en el array de todosList:Array iterando sobre cada uno de los ToDos del proyecto filtrado por nombre previamente por el gestor (metodo iterativo sobre los proyectos). Luego que se envía el mensaje al objeto proyecto que coincide con el nombre del proyecto que fue clickeado.
+        //Buscar en el array de todosList:Array iterando sobre cada uno de los ToDos del proyecto filtrado por id previamente por el gestor (metodo iterativo sobre los proyectos). Luego que se envía el mensaje al objeto proyecto que coincide con el id del proyecto que fue clickeado.
 
-        let selectedTodoIndex = this.todosList.findIndex( (todo) => todo.title === todoTitle );
+        let selectedTodoIndex = this.todosList.findIndex( (todo) => todo.id === todoId );
         
         this.todosList.splice(selectedTodoIndex, 1);
 
     }
 
+    completeTodo(todoId) {
 
+        let selectedTodo = this.todosList.find( (todo) => 
+        todo.id === todoId);
+
+        let checklistRes = selectedTodo.toggleChecklistState();
+
+        return checklistRes;
+
+    }
 
 }
 

@@ -2,6 +2,7 @@ export function createIUProject(project) {
 
     const projectDiv = document.createElement('div');
     projectDiv.classList.add('project');
+    projectDiv.setAttribute('project-id', project.id);
 
     const projectName = document.createElement('h3');
     projectName.textContent = project.name;

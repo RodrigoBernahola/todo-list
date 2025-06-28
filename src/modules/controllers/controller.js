@@ -24,27 +24,34 @@ class Controller {
 
         //Agregar comprobación luego, de que no haya un proyecto con el mismo nombre en el array de proyectos.
 
-        const project = new Project(projectName, []);
-        this.projects.push(project);
+        const newProject = new Project(projectName, []);
+        this.projects.push(newProject);
 
-        return project;
+        let projectUUID = self.crypto.randomUUID();
 
+        newProject.id = projectUUID;
+
+        console.log(newProject);
+
+        return newProject;
 
     }
 
     removeProject(projectName) {
 
+        //Modificar método para que se elimine dado un id de proyecto
+
         //Buscar el proyecto y eliminarlo del array de proyectos del controlador.
 
     }
 
-    addTodo(todoData, projectName) {
+    addTodo(todoData, projectId) {
 
         //Con los datos del To-do crearlo y agregarlo al proyecto que corresponde, de crearlo se encarga el proyecto dueño.
 
-        //Filtrar entre los proyectos existentes aquel que tiene el mismo nombre que el parametro y mandarle el mensaje con los datos del proyecto.
+        //Filtrar entre los proyectos existentes aquel que tiene el mismo id que el parametro y mandarle el mensaje con los datos del proyecto.
 
-        let selectedProject = this.projects.find( (project) => project.name === projectName);
+        let selectedProject = this.projects.find( (project) => project.id === projectId);
 
         let newTodo = selectedProject.addTodo(todoData);
 
@@ -52,12 +59,21 @@ class Controller {
 
     }
 
-    deleteTodo(todoTitle, projectName) {
+    deleteTodo(todoId, projectId) {
 
-        let selectedProject = this.projects.find( (project) => project.name === projectName);
+        let selectedProject = this.projects.find( (project) => project.id === projectId);
 
-        selectedProject.deleteTodo(todoTitle);
+        selectedProject.deleteTodo(todoId);
 
+    }
+
+    completeTodo(todoId, projectId) {
+
+        let selectedProject = this.projects.find( (project) => project.id === projectId);
+
+        let checklistRes = selectedProject.completeTodo(todoId);
+        
+        return checklistRes;
 
     }
 
