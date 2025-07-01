@@ -1,5 +1,6 @@
 import { createDialog } from '../components/dialog.js';
-import { isValid, parse } from "date-fns";
+import { isValid, parse } from 'date-fns';
+import { createEditDialog} from '../components/createEditDialog.js';
 
 
 class IAddTodo {
@@ -7,12 +8,16 @@ class IAddTodo {
         this.projectController = projectController;
         this.dialog = null;
         this.currentProject = null;
-        this.currentProjectContainer = null;
+        this.currentProjectContainer = null;    
+        this.currentTodoItemId = null;
+        this.currentProjectId = null;
+        this.currentTodoItem = null;
         
         // Bind methods to preserve 'this' context
         this.handleAddTodoClick = this.handleAddTodoClick.bind(this);
         this.handleAcceptClick = this.handleAcceptClick.bind(this);
         this.handleCancelClick = this.handleCancelClick.bind(this);
+        this.handleEditClick = this.handleEditClick.bind(this);
     }
 
     // Método para inicializar los event listeners
@@ -46,7 +51,119 @@ class IAddTodo {
 
             }
 
-        })
+        });
+
+        document.addEventListener('click', (event) => {
+
+            if (event.target.classList.contains('edit-todo')) {
+
+                this.handleEditTodoClick(event);
+
+            }
+
+        });
+
+    }
+
+    handleEditTodoClick(event) {
+
+        const todoItem = event.target.parentElement.parentElement;
+	    const todosContainer = todoItem.parentElement;
+
+        const todoId = todoItem.getAttribute('todo-id');
+        const projectId = todosContainer.parentElement.getAttribute('project-id');
+        
+        this.currentTodoItem = todoItem;
+        this.currentTodoItemId = todoId;
+        this.currentProjectId = projectId;
+        this.currentProjectContainer = todosContainer;
+        this.currentProject = todosContainer.parentElement;
+
+        this.dialog = createEditDialog();
+        document.body.appendChild(this.dialog);
+
+        // Configurar event listeners específicos del dialog
+        this.setupDialogEventListeners(true);
+        
+        // Mostrar el modal
+        this.dialog.showModal();
+
+    }
+
+    extractEditData(event) {
+
+        event.preventDefault();
+
+        const form = this.dialog.querySelector('form');
+        const formData = new FormData(form);
+
+        const title = formData.get('title');
+        const description = formData.get('description') || '';
+
+        let dueDateString = formData.get('date');
+
+        const priority = formData.get('priority');
+
+        //Validaciones de los datos a editar ingresados
+
+        const dueDate = this.validateDate(dueDateString);
+
+        if (!title || !priority || !dueDate) {
+            return null;
+        };
+
+        return {title, description, dueDate, priority};
+
+    }
+
+    setupDialogEventListeners(flag = false) {
+
+        const acceptButton = this.dialog.querySelector('.acceptButton');
+        const cancelButton = this.dialog.querySelector('.cancelButton');
+
+        if (flag) {
+            acceptButton.addEventListener('click', this.handleEditClick);
+        }
+
+        else {
+            acceptButton.addEventListener('click', this.handleAcceptClick);
+        }
+        
+        cancelButton.addEventListener('click', this.handleCancelClick);
+        
+        // Event listener para cerrar con ESC
+        this.dialog.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.handleCancelClick();
+            }
+        });
+
+    }
+
+    handleEditClick(event) {
+
+        const editTodoData = this.extractEditData(event);
+
+        //Sera verdadero si editTodoData no ha sido retornado como null en la llamada anterior, por lo tanto hay datos cargados válidos
+        if (editTodoData) {
+
+            //Delegar al controlador la actualización de los datos nuevos del todo clickeado
+            
+            let edittedTodo = this.projectController.editTodo(editTodoData, this.currentTodoItemId, this.currentProjectId);
+
+            this.currentTodoItem.remove();
+
+            this.refreshUI(edittedTodo, edittedTodo.id, this.currentProjectContainer);
+
+
+            //Limpiar form y cerrarlo
+            this.resetAndClose();
+        }
+
+        else {
+            this.showError('Pleas fill in all required fields');
+        }
+
     }
 
 
@@ -109,21 +226,6 @@ class IAddTodo {
         this.dialog.showModal();
     }
 
-    setupDialogEventListeners() {
-        const acceptButton = this.dialog.querySelector('.acceptButton');
-        const cancelButton = this.dialog.querySelector('.cancelButton');
-        
-        acceptButton.addEventListener('click', this.handleAcceptClick);
-        cancelButton.addEventListener('click', this.handleCancelClick);
-        
-        // Event listener para cerrar con ESC
-        this.dialog.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                this.handleCancelClick();
-            }
-        });
-    }
-
     handleAcceptClick(event) {
         const todoData = this.extractData(event);
         
@@ -163,24 +265,6 @@ class IAddTodo {
         const priority = formData.get('priority'); //Duvuelve un string con el texto seleccionado
         const isCompleted = formData.get('checklist'); //Devuelve object o null
 
-        console.log('TITULO');
-        console.log(formData.get('title'));
-        console.log(typeof(formData.get('title')));
-
-        console.log('FECHA');
-        console.log(formData.get('date'));
-        console.log(typeof(formData.get('date')));
-
-        console.log('PRIORIDAD');
-        console.log(formData.get('priority'));
-        console.log(typeof(formData.get('priority')));
-
-        console.log('CHECKLIST');
-        console.log(formData.get('checklist'));
-        console.log(typeof(formData.get('chceklist')));        
-        console.log(true === formData.get('checklist'));
-        console.log(formData.get('checklist') === 'on'); //TRUE SI SE MARCA EL CHECKLIST
-
         //Los datos que son necesarios validar (obligatorios) son: Titulo, prioridad, fecha. 
         // La descripcion y el checklist pueden estar vacios o por defecto
 
@@ -203,7 +287,6 @@ class IAddTodo {
     validateDate(dateString) {
 
         if (!dateString || dateString.trim() === '') {
-            console.log('Fecha requerida');
             return null;
         }
         // Para input HTML date, el formato yyyy-MM-dd es válido para Date()
@@ -211,7 +294,6 @@ class IAddTodo {
         const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
 
         if (!isValid(parsedDate)) {
-            console.log('Error: La fecha ingresada no es válida o no está en el formato YYYY-MM-DD.');
             return null; // Si no es válida, devolvemos null
         }
 
@@ -261,7 +343,6 @@ class IAddTodo {
         status.className = 'todo-status';
         status.dataset.completed = todoData.isCompleted;
 
-        
         
         // Crear contenedor para los botones
         const actionsDiv = document.createElement('div');
@@ -334,6 +415,7 @@ class IAddTodo {
         // Limpiar referencias
         this.currentProject = null;
         this.currentProjectContainer = null;
+        this.currentTodoItem = null;
     }
 
 

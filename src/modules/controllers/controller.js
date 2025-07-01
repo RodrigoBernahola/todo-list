@@ -31,8 +31,6 @@ class Controller {
 
         newProject.id = projectUUID;
 
-        console.log(newProject);
-
         return newProject;
 
     }
@@ -74,6 +72,16 @@ class Controller {
         let checklistRes = selectedProject.completeTodo(todoId);
         
         return checklistRes;
+
+    }
+
+    editTodo(editTodoData, todoId, projectId) {
+
+        let selectedProject = this.projects.find( (project) => project.id === projectId);
+        
+        let res = selectedProject.editTodo(editTodoData, todoId);
+
+        return res;
 
     }
 

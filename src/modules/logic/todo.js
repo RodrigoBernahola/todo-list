@@ -23,6 +23,16 @@ class Todo {
         return this.checklist;
     }
 
+    editTodo(newData) {
+
+        this.title = newData.title;
+        this.description = newData.description;
+        this.dueDate = newData.dueDate;
+        this.priority = newData.priority;
+
+        return this;
+
+    }
 }
 
 export {Todo};

@@ -73,8 +73,6 @@ class IAddProject {
             const newProjectIU = createIUProject(newProject);
             document.querySelector('.gridContainer').appendChild(newProjectIU);
 
-            console.log(this.projectController.projects);
-
         }
 
         else {

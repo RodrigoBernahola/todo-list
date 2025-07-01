@@ -22,8 +22,6 @@ class Project {
 
         this.todosList.push(newTodo);
 
-        console.log(newTodo);
-
         return newTodo;
     }
 
@@ -46,6 +44,16 @@ class Project {
 
         return checklistRes;
 
+    }
+
+    editTodo(editTodoData, todoId) {
+
+        let selectedTodo = this.todosList.find( (todo) => todo.id === todoId);
+
+        let res = selectedTodo.editTodo(editTodoData);
+
+        return res;
+        
     }
 
 }
