@@ -4,6 +4,7 @@ import { createLandingPage } from './modules/views/components/landing.js';
 import { Controller } from './modules/controllers/controller.js';
 import { IAddTodo } from './modules/views/boundary/IAddTodo.js';
 import { IAddProject } from './modules/views/boundary/IAddProject.js';
+import { localStorageController } from './modules/controllers/localStorageController.js';
 
 import './styles/main.css';
 
@@ -16,11 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeDOM();
     
     // Inicialización de controladores
-    const projectController = initializeControllers();
-    
-    // Inicialización de boundary objects (interfaces de usuario)
-    initializeBoundaryObjects(projectController);
+    const {projectController} = initializeControllers();
 
+    const localStorageController = initializeLocalStorageContoller(projectController);
+    
+    localStorageController.initialize();
+
+    // Inicialización de boundary objects (interfaces de usuario)
+    initializeBoundaryObjects(projectController, localStorageController);
+    
 });
 
 
@@ -38,7 +43,16 @@ function initializeDOM() {
 
 }
 
+function initializeLocalStorageContoller(projectController) {
+
+    const localStorageControllerObject = new localStorageController(projectController);
+
+    return localStorageControllerObject;
+}
+
+
 function initializeControllers() {
+    
     const gridContainer = document.querySelector('.gridContainer');
     
     // Crear el controlador del proyecto
@@ -47,16 +61,16 @@ function initializeControllers() {
     // Inicializar con proyecto por defecto
     projectController.initialize(gridContainer);
     
-    return projectController;
+    return { projectController };
 }
 
-function initializeBoundaryObjects(projectController) {
+function initializeBoundaryObjects(projectController, localStorageController) {
     // Inicializar el boundary para agregar todos
-    const iAddTodo = new IAddTodo(projectController);
+    const iAddTodo = new IAddTodo(projectController, localStorageController);
     iAddTodo.initialize();
     
     // Inicializar el boundary para agregar proyectos 
-    const iAddProject = new IAddProject(projectController);
+    const iAddProject = new IAddProject(projectController, localStorageController);
     iAddProject.initialize(); 
 
 }

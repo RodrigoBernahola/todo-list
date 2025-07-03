@@ -13,23 +13,34 @@ class Controller {
 
         //En este método se añadirá todo el funcionamiento necesario que se necesita la primera vez que carga la página
 
-        this.createProject('Default Project');
-        const iuNewProject = createIUProject(this.projects[0]);
+        let defaultProject = this.createProject('Default Project', '1');
+        const iuNewProject = createIUProject(defaultProject);
         gridContainer.appendChild(iuNewProject);
 
+        return defaultProject;
 
     }
 
-    createProject(projectName) {
+    createProject(projectName, projectId = null) {
 
         //Agregar comprobación luego, de que no haya un proyecto con el mismo nombre en el array de proyectos.
 
         const newProject = new Project(projectName, []);
+
+        if (!projectId) {
+            
+            let projectUUID = self.crypto.randomUUID();
+
+            newProject.id = projectUUID;
+            
+        }
+        else {
+
+            newProject.id = projectId;
+
+        }
+        
         this.projects.push(newProject);
-
-        let projectUUID = self.crypto.randomUUID();
-
-        newProject.id = projectUUID;
 
         return newProject;
 
@@ -50,6 +61,8 @@ class Controller {
         //Filtrar entre los proyectos existentes aquel que tiene el mismo id que el parametro y mandarle el mensaje con los datos del proyecto.
 
         let selectedProject = this.projects.find( (project) => project.id === projectId);
+
+        console.log(selectedProject);
 
         let newTodo = selectedProject.addTodo(todoData);
 
@@ -85,6 +98,13 @@ class Controller {
 
     }
 
+    getProject(projectId) {
+
+        let selectedProject = this.projects.find( (project) => project.id === projectId);
+
+        return selectedProject;
+
+    }
 
 
 }

@@ -31,7 +31,11 @@ class Project {
 
         let selectedTodoIndex = this.todosList.findIndex( (todo) => todo.id === todoId );
         
+        console.log(this.todosList[selectedTodoIndex])
+
         this.todosList.splice(selectedTodoIndex, 1);
+
+        
 
     }
 
