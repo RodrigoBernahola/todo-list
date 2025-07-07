@@ -1,6 +1,9 @@
 import { createDialog } from '../components/dialog.js';
 import { isValid, parse } from 'date-fns';
 import { createEditDialog} from '../components/createEditDialog.js';
+import { validateDate }from '../../logic/validateDate.js';
+import { formatDate } from '../../logic/formatDate.js';
+import { createTodoElement } from '../components/createIUTodoElement.js';
 
 
 class IAddTodo {
@@ -106,7 +109,7 @@ class IAddTodo {
 
         //Validaciones de los datos a editar ingresados
 
-        const dueDate = this.validateDate(dueDateString);
+        const dueDate = validateDate(dueDateString);
 
         if (!title || !priority || !dueDate) {
             return null;
@@ -275,7 +278,7 @@ class IAddTodo {
         };
 
         // Validar fecha y obtener el objeto Date
-        const dueDate = this.validateDate(dueDateString);
+        const dueDate = validateDate(dueDateString);
         if (!dueDate) {
             return null;
         }
@@ -284,121 +287,9 @@ class IAddTodo {
     }
 
 
-    validateDate(dateString) {
-
-        if (!dateString || dateString.trim() === '') {
-            return null;
-        }
-        // Para input HTML date, el formato yyyy-MM-dd es válido para Date()
-
-        const parsedDate = parse(dateString, 'yyyy-MM-dd', new Date());
-
-        if (!isValid(parsedDate)) {
-            return null; // Si no es válida, devolvemos null
-        }
-
-        return parsedDate; // Devuelve el objeto Date válido
-
-    }
-
     refreshUI(todoData, todoId, todosContainer) {
-        const todoElement = this.createTodoElement(todoData, todoId);
+        const todoElement = createTodoElement(todoData, todoId);
         todosContainer.appendChild(todoElement);
-    }
-
-
-    createTodoElement(todoData, todoId) {
-        // Crear el contenedor principal
-        const todoDiv = document.createElement('div');
-        todoDiv.className = 'todo-item new';
-        todoDiv.setAttribute('todo-id', todoId);
-        
-        // Si está completado, añadir la clase correspondiente
-        if (todoData.isCompleted === 'on') {
-            todoDiv.classList.add('completed');
-        }
-        
-        // Crear los elementos de información
-        const title = document.createElement('h4');
-        title.textContent = todoData.title;
-        title.className = 'todo-title';
-        
-        const description = document.createElement('p');
-        description.textContent = todoData.description;
-        description.className = 'todo-description';
-        
-        const dueDate = document.createElement('p');
-        dueDate.textContent = `Due: ${this.formatDate(todoData.dueDate)}`;
-        dueDate.className = 'todo-date';
-        
-        const priority = document.createElement('p');
-        priority.textContent = `Priority: ${todoData.priority}`;
-        priority.className = 'todo-priority';
-        priority.dataset.priority = todoData.priority.toLowerCase();
-        
-        const status = document.createElement('p');
-
-        let statusText = todoData.isCompleted !== null ? 'Yes' : 'No'; 
-        status.textContent = `Completed: ${statusText}`;
-        status.className = 'todo-status';
-        status.dataset.completed = todoData.isCompleted;
-
-        
-        // Crear contenedor para los botones
-        const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'todo-actions';
-        
-        // Crear botones
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete To-do';
-        deleteBtn.className = 'delete-todo';
-        
-        const completeBtn = document.createElement('button');
-        completeBtn.textContent = 'Completed';
-        completeBtn.className = 'complete-todo';
-        
-        const editBtn = document.createElement('button');
-        editBtn.textContent = 'Edit To-do';
-        editBtn.className = 'edit-todo';
-        
-        // Añadir botones al contenedor de acciones
-        actionsDiv.appendChild(deleteBtn);
-        actionsDiv.appendChild(completeBtn);
-        actionsDiv.appendChild(editBtn);
-        
-        // Añadir todos los elementos al contenedor principal
-        todoDiv.appendChild(title);
-        todoDiv.appendChild(description);
-        todoDiv.appendChild(dueDate);
-        todoDiv.appendChild(priority);
-        todoDiv.appendChild(status);
-        todoDiv.appendChild(actionsDiv);
-        
-        // Eliminar la clase 'new' después de la animación
-        setTimeout(() => {
-            todoDiv.classList.remove('new');
-        }, 500);
-    
-    return todoDiv;
-    }   
-
-
-    // Método auxiliar para formatear fechas
-    formatDate(dateString) {
-        if (!dateString) return 'No date';
-        
-        try {
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return dateString;
-            
-            return date.toLocaleDateString('es-ES', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            });
-        } catch (e) {
-            return dateString;
-        }
     }
 
 
