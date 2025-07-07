@@ -1,12 +1,14 @@
 import { createProjectDialog } from '../components/createProjectDialog.js';
 import {createIUProject } from '../components/createIUProject.js';
+import { localStorageController } from '../../controllers/localStorageController.js';
 
 class IAddProject {
 
-    constructor(projectController) {
+    constructor(projectController, localStorageController) {
 
         this.projectController = projectController;
-        this.dialog = null;
+        this.dialog = null; 
+        this.localStorageController = localStorageController;
 
 
         // Bind methods to preserve 'this' context
@@ -72,6 +74,9 @@ class IAddProject {
             const newProject = this.projectController.createProject(projectName);
             const newProjectIU = createIUProject(newProject);
             document.querySelector('.gridContainer').appendChild(newProjectIU);
+
+            //Manejo de Local Storage
+            this.localStorageController.saveProjectAtLocalStore(newProject.id);
 
         }
 

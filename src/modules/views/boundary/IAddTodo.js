@@ -4,17 +4,19 @@ import { createEditDialog} from '../components/createEditDialog.js';
 import { validateDate }from '../../logic/validateDate.js';
 import { formatDate } from '../../logic/formatDate.js';
 import { createTodoElement } from '../components/createIUTodoElement.js';
+import { createTodoElement } from '../components/createIUTodoElement.js';
+import { localStorageController } from '../../controllers/localStorageController.js';
 
 
 class IAddTodo {
-    constructor(projectController) {
+    constructor(projectController, localStorageController) {
         this.projectController = projectController;
         this.dialog = null;
-        this.currentProject = null;
+        this.currentProjectId = null;
         this.currentProjectContainer = null;    
         this.currentTodoItemId = null;
-        this.currentProjectId = null;
         this.currentTodoItem = null;
+        this.localStorageController = localStorageController;
         
         // Bind methods to preserve 'this' context
         this.handleAddTodoClick = this.handleAddTodoClick.bind(this);
@@ -80,7 +82,7 @@ class IAddTodo {
         this.currentTodoItemId = todoId;
         this.currentProjectId = projectId;
         this.currentProjectContainer = todosContainer;
-        this.currentProject = todosContainer.parentElement;
+        this.currentProjectId = todosContainer.parentElement;
 
         this.dialog = createEditDialog();
         document.body.appendChild(this.dialog);
@@ -210,6 +212,11 @@ class IAddTodo {
     
 	    todosContainer.removeChild(todoItem);
 
+        //Eliminar los datos del almacenamiento local
+        
+        //this.localStorageController.storeProject(projectId);
+        //this.localStorageController.deleteTodoFromLocalStorage(todoId, projectId);
+
     }
 
 
@@ -219,7 +226,8 @@ class IAddTodo {
         document.body.appendChild(this.dialog);
 
         // Guardar referencias del proyecto actual
-        this.currentProject = event.target.parentElement.getAttribute('project-id');
+
+        this.currentProjectId = event.target.parentElement.getAttribute('project-id');
         this.currentProjectContainer = event.target.parentElement.querySelector('.todosContainer');
         
         // Configurar event listeners específicos del dialog
@@ -234,13 +242,20 @@ class IAddTodo {
         
         if (todoData) {
             // Usar el controlador para agregar el todo
-            let newTodo = this.projectController.addTodo(todoData, this.currentProject);
+            console.log(todoData);
+            console.log(this.projectController);
+            let newTodo = this.projectController.addTodo(todoData, this.currentProjectId);
 
             let todoId = newTodo.id;
-            
+            console.log(newTodo);
+            console.log(this.currentProjectId);
+
             // Actualizar la interfaz
             this.refreshUI(todoData, todoId, this.currentProjectContainer);
             
+            //Actualizar local storage
+            this.localStorageController.saveTodoAtLocalStore(newTodo, this.currentProjectId);
+
             // Limpiar y cerrar
             this.resetAndClose();
         } else {
@@ -304,7 +319,7 @@ class IAddTodo {
         }
         
         // Limpiar referencias
-        this.currentProject = null;
+        this.currentProjectId = null;
         this.currentProjectContainer = null;
         this.currentTodoItem = null;
     }
