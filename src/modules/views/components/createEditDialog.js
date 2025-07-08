@@ -1,13 +1,11 @@
-//Función encargada de crear y agregar el dialog para obtener los datos del usuario
-
-export function createDialog() {
+export function createEditDialog() {
 
     //Creo el elemento <dialog>
     const dialog = document.createElement('dialog');
 
     //Creo el título del dialogo <h2>
     const h2 = document.createElement('h2');
-    h2.textContent = 'Add a new To-Do to this project';
+    h2.textContent = 'Edit this To-do';
     dialog.appendChild(h2);
     dialog.classList.add('dialogAddTodo');
 
@@ -18,7 +16,7 @@ export function createDialog() {
 
     //Creo el campo título del To-do a ingresar
     const labelTitle = document.createElement('label');
-    labelTitle.textContent = 'To-do Title:';
+    labelTitle.textContent = 'New To-do Title:';
     labelTitle.setAttribute('for', 'title');
     form.appendChild(labelTitle);
 
@@ -32,7 +30,7 @@ export function createDialog() {
 
     //Creo el campo descripción del To-do a ingresar
     const descriptionLabel = document.createElement('label');
-    descriptionLabel.textContent = 'Add a description:';
+    descriptionLabel.textContent = 'Add a new description:';
     descriptionLabel.setAttribute('for', 'description');
     form.appendChild(descriptionLabel);
 
@@ -45,7 +43,7 @@ export function createDialog() {
 
     //Crear el campo fecha, luego modificarlo 
     const dateLabel = document.createElement('label');
-    dateLabel.textContent = 'Due date:';
+    dateLabel.textContent = 'Edit this Due date:';
     dateLabel.setAttribute('for', 'date');
     form.appendChild(dateLabel);
 
@@ -60,7 +58,7 @@ export function createDialog() {
     //Crear el elemento select con sus campos para prioridad
 
     const labelPriority = document.createElement('label');
-    labelPriority.textContent = 'Select the priority:';
+    labelPriority.textContent = 'Select the new priority:';
     labelPriority.setAttribute('for', 'priority');
     form.appendChild(labelPriority);
 
@@ -90,21 +88,6 @@ export function createDialog() {
     selectPriority.appendChild(optionLow);
 
     form.appendChild(selectPriority);
-
-    //Crear el campo para el checklist
-    
-    const checklistCheckbox = document.createElement('input');
-    checklistCheckbox.setAttribute('type', 'checkbox');
-    checklistCheckbox.setAttribute('id', 'checklist');
-    checklistCheckbox.setAttribute('name', 'checklist');
-    
-    const checklistLabel = document.createElement('label');
-    checklistLabel.setAttribute('for', 'checklist');
-    checklistLabel.textContent = 'Mark as completed';
-    
-    form.appendChild(checklistCheckbox);
-    form.appendChild(checklistLabel);
-
 
     //Creacion de botones dentro del dialog
     const acceptButton = document.createElement('button');

@@ -1,5 +1,5 @@
 //Esta función se encarga de crear y exportar el hero de la landing page.
-import '../../../styles/hero.css';
+import '../../../styles/components/hero.css';
 
 
 export function createHero() {
@@ -12,6 +12,7 @@ export function createHero() {
 
     const button = document.createElement('button');
     button.textContent = 'Create a new project';
+    button.classList.add('buttonAddNewProject');
 
 
     hero.appendChild(h1);

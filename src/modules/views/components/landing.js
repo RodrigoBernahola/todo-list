@@ -7,7 +7,7 @@ export function createLandingPage() {
     const gridContainer = createGrid();
 
     const container = document.createElement('main');
-    container.classList.add('landing-page');
+    container.classList.add('landing-page');    
 
     container.appendChild(hero);
     container.appendChild(gridContainer);

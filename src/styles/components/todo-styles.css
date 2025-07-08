@@ -1,0 +1,254 @@
+/* Estilos para los elementos todo */
+.todo-item {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--primary-light);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.todo-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.todo-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(177, 187, 247, 0.05) 0%, rgba(138, 154, 241, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.todo-item:hover::before {
+    opacity: 1;
+}
+
+.todo-item > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Título del todo */
+.todo-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 10px 0;
+}
+
+/* Descripción del todo */
+.todo-description {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+}
+
+/* Fecha del todo */
+.todo-date {
+    font-size: 13px;
+    color: #777;
+    margin: 0 0 6px 0;
+    display: flex;
+    align-items: center;
+}
+
+.todo-date::before {
+    content: '📅';
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+/* Prioridad del todo */
+.todo-priority {
+    font-size: 13px;
+    margin: 0 0 6px 0;
+    display: flex;
+    align-items: center;
+}
+
+.todo-priority::before {
+    content: '🔔';
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+/* Estilos según la prioridad */
+.todo-priority[data-priority="high"] {
+    color: var(--error-color);
+    font-weight: 600;
+}
+
+.todo-priority[data-priority="medium"] {
+    color: var(--warning-color);
+}
+
+.todo-priority[data-priority="low"] {
+    color: var(--success-color);
+}
+
+/* Estado del todo */
+.todo-status {
+    font-size: 13px;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.todo-status::before {
+    content: '✓';
+    margin-right: 6px;
+    font-size: 14px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.todo-status[data-completed="true"] {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
+.todo-status[data-completed="true"]::before {
+    background-color: var(--success-light);
+    color: var(--success-color);
+}
+
+.todo-status[data-completed="false"] {
+    color: #777;
+}
+
+.todo-status[data-completed="false"]::before {
+    background-color: #eee;
+    color: #aaa;
+}
+
+/* Contenedor de botones */
+.todo-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+/* Botones del todo */
+.todo-item button {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Botón eliminar */
+.delete-todo {
+    background-color: var(--error-light);
+    color: var(--error-color);
+    border: 1px solid transparent;
+}
+
+.delete-todo:hover {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.delete-todo::before {
+    content: '🗑️';
+    font-size: 14px;
+}
+
+/* Botón completar */
+.complete-todo {
+    background-color: var(--success-light);
+    color: var(--success-color);
+    border: 1px solid transparent;
+}
+
+.complete-todo:hover {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.complete-todo::before {
+    content: '✓';
+    font-size: 14px;
+}
+
+/* Botón editar */
+.edit-todo {
+    background-color: var(--info-light);
+    color: var(--info-color);
+    border: 1px solid transparent;
+}
+
+.edit-todo:hover {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.edit-todo::before {
+    content: '✏️';
+    font-size: 14px;
+}
+
+/* Todo completado */
+.todo-item.completed {
+    border-left-color: var(--success-color);
+    opacity: 0.8;
+}
+
+.todo-item.completed .todo-title,
+.todo-item.completed .todo-description {
+    text-decoration: line-through;
+    color: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .todo-item {
+        padding: 14px 16px;
+    }
+    
+    .todo-actions {
+        flex-direction: column;
+    }
+    
+    .todo-item button {
+        width: 100%;
+    }
+}
+
+/* Animación para nuevos todos */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.todo-item.new {
+    animation: fadeIn 0.5s ease forwards;
+}
