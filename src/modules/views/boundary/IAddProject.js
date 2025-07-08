@@ -1,15 +1,13 @@
 import { createProjectDialog } from '../components/createProjectDialog.js';
-import {createIUProject } from '../components/createIUProject.js';
-import { localStorageController } from '../../controllers/localStorageController.js';
+import { createIUProject } from '../components/createIUProject.js';
 
 class IAddProject {
 
-    constructor(projectController, localStorageController) {
+    
+    constructor(projectController) {
 
         this.projectController = projectController;
         this.dialog = null; 
-        this.localStorageController = localStorageController;
-
 
         // Bind methods to preserve 'this' context
         this.handleAddProjectClick = this.handleAddProjectClick.bind(this);
@@ -18,25 +16,28 @@ class IAddProject {
 
     }
     
+
     initialize() {
 
         this.attachEventListeners();
 
     }
 
+
     attachEventListeners() {
 
         document.addEventListener('click', (event) => {
 
             if (event.target.classList.contains('buttonAddNewProject')) {
-                this.handleAddProjectClick(event);
+                this.handleAddProjectClick();
             }
 
         })
 
     }
 
-    handleAddProjectClick(event) {
+
+    handleAddProjectClick() {
 
         this.dialog = createProjectDialog();
         document.body.appendChild(this.dialog);
@@ -46,6 +47,7 @@ class IAddProject {
         this.dialog.showModal();
 
     }
+
 
     setupDialogEventListeners() {
 
@@ -64,6 +66,7 @@ class IAddProject {
 
     }
 
+
     handleAcceptClick() {
 
         const projectName = this.dialog.querySelector('input').value;
@@ -75,9 +78,6 @@ class IAddProject {
             const newProjectIU = createIUProject(newProject);
             document.querySelector('.gridContainer').appendChild(newProjectIU);
 
-            //Manejo de Local Storage
-            this.localStorageController.saveProjectAtLocalStore(newProject.id);
-
         }
 
         else {
@@ -88,9 +88,11 @@ class IAddProject {
 
     }
 
+
     handleCancelClick() {
         this.resetAndClose();
     }
+
 
     resetAndClose() {
         if (this.dialog) {
@@ -104,7 +106,7 @@ class IAddProject {
         
     }
 
-
 }
+
 
 export { IAddProject };

@@ -11,7 +11,6 @@ class Project {
     }
 
 
-
     addTodo(todoData) {
 
         let uuid = self.crypto.randomUUID();
@@ -23,21 +22,20 @@ class Project {
         this.todosList.push(newTodo);
 
         return newTodo;
+
     }
 
+    
     deleteTodo(todoId) {
 
         //Buscar en el array de todosList:Array iterando sobre cada uno de los ToDos del proyecto filtrado por id previamente por el gestor (metodo iterativo sobre los proyectos). Luego que se envía el mensaje al objeto proyecto que coincide con el id del proyecto que fue clickeado.
 
         let selectedTodoIndex = this.todosList.findIndex( (todo) => todo.id === todoId );
         
-        console.log(this.todosList[selectedTodoIndex])
-
         this.todosList.splice(selectedTodoIndex, 1);
 
-        
-
     }
+
 
     completeTodo(todoId) {
 
@@ -49,6 +47,7 @@ class Project {
         return checklistRes;
 
     }
+
 
     editTodo(editTodoData, todoId) {
 

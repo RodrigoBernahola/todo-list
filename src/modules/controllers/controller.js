@@ -1,5 +1,6 @@
-import {Project} from '../logic/project.js';
-import {createIUProject} from '../views/components/createIUProject.js';
+import { Project } from '../logic/project.js';
+import { createIUProject } from '../views/components/createIUProject.js';
+
 
 class Controller {
 
@@ -13,7 +14,7 @@ class Controller {
 
         //En este método se añadirá todo el funcionamiento necesario que se necesita la primera vez que carga la página
 
-        let defaultProject = this.createProject('Default Project', '1');
+        let defaultProject = this.createProject('Default Project');
         const iuNewProject = createIUProject(defaultProject);
         gridContainer.appendChild(iuNewProject);
 
@@ -21,25 +22,16 @@ class Controller {
 
     }
 
-    createProject(projectName, projectId = null) {
+    createProject(projectName) {
 
         //Agregar comprobación luego, de que no haya un proyecto con el mismo nombre en el array de proyectos.
 
         const newProject = new Project(projectName, []);
-
-        if (!projectId) {
             
-            let projectUUID = self.crypto.randomUUID();
+        let projectUUID = self.crypto.randomUUID();
 
-            newProject.id = projectUUID;
+        newProject.id = projectUUID;
             
-        }
-        else {
-
-            newProject.id = projectId;
-
-        }
-        
         this.projects.push(newProject);
 
         return newProject;

@@ -1,5 +1,6 @@
 // Método auxiliar para formatear fechas
 export function formatDate(dateString) {
+
     if (!dateString) return 'No date';
     
     try {
@@ -14,4 +15,5 @@ export function formatDate(dateString) {
     } catch (e) {
         return dateString;
     }
+    
 }

@@ -2,9 +2,7 @@
 import { createFooter } from './modules/views/components/footer.js';
 import { createLandingPage } from './modules/views/components/landing.js';
 import { Controller } from './modules/controllers/controller.js';
-import { IAddTodo } from './modules/views/boundary/IAddTodo.js';
-import { IAddProject } from './modules/views/boundary/IAddProject.js';
-import { localStorageController } from './modules/controllers/localStorageController.js';
+import { IBoundary } from './modules/views/boundary/IBoundary.js';
 
 import './styles/main.css';
 
@@ -17,14 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeDOM();
     
     // Inicialización de controladores
-    const {projectController} = initializeControllers();
-
-    const localStorageController = initializeLocalStorageContoller(projectController);
-    
-    localStorageController.initialize();
+    const projectController = initializeControllers();
 
     // Inicialización de boundary objects (interfaces de usuario)
-    initializeBoundaryObjects(projectController, localStorageController);
+    initializeBoundaryObjects(projectController);
     
 });
 
@@ -43,13 +37,6 @@ function initializeDOM() {
 
 }
 
-function initializeLocalStorageContoller(projectController) {
-
-    const localStorageControllerObject = new localStorageController(projectController);
-
-    return localStorageControllerObject;
-}
-
 
 function initializeControllers() {
     
@@ -61,24 +48,14 @@ function initializeControllers() {
     // Inicializar con proyecto por defecto
     projectController.initialize(gridContainer);
     
-    return { projectController };
+    return projectController ;
+
 }
 
-function initializeBoundaryObjects(projectController, localStorageController) {
-    // Inicializar el boundary para agregar todos
-    const iAddTodo = new IAddTodo(projectController, localStorageController);
-    iAddTodo.initialize();
+
+function initializeBoundaryObjects(projectController) {
+
+    const iBoundary = new IBoundary(projectController);
+    iBoundary.initialize()
     
-    // Inicializar el boundary para agregar proyectos 
-    const iAddProject = new IAddProject(projectController, localStorageController);
-    iAddProject.initialize(); 
-
-}
-
-// Funciones de utilidad que podrían ser útiles
-function handleGlobalErrors() {
-    window.addEventListener('error', (event) => {
-        console.error('Global error:', event.error);
-        // Aquí podrías implementar logging o notificaciones de error
-    });
 }
